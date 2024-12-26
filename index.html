@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Les Meilleurs Restaurants d'Amiens</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍽️ Les Meilleures Tables d'Amiens</h1>
+        </header>
+
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+
+        <div class="restaurant-grid">
+            <!-- Restaurant cards here -->
+        </div>
+    </div>
+
+    <script>
+        // Coordonnées d'Amiens
+        const AMIENS_CENTER = { lat: 49.894067, lng: 2.295753 };
+        
+        // Liste des restaurants avec leurs coordonnées
+        const restaurants = [
+            {
+                name: "Le Quai",
+                position: { lat: 49.897396, lng: 2.301824 },
+                address: "13 Quai Bélu, 80000 Amiens",
+                rating: 4.6,
+                type: "Gastronomique Français"
+            },
+            // Autres restaurants...
+        ];
+
+        function initMap() {
+            // Création de la carte
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 14,
+                center: AMIENS_CENTER,
+                styles: [
+                    // Style personnalisé de la carte
+                ]
+            });
+
+            // Ajout des marqueurs pour chaque restaurant
+            restaurants.forEach(restaurant => {
+                const marker = new google.maps.Marker({
+                    position: restaurant.position,
+                    map: map,
+                    title: restaurant.name,
+                    animation: google.maps.Animation.DROP
+                });
+
+                // Création de l'info-bulle
+                const infowindow = new google.maps.InfoWindow({
+                    content: `
+                        <div class="map-info-window">
+                            <h3>${restaurant.name}</h3>
+                            <p><strong>${restaurant.type}</strong></p>
+                            <p>⭐ ${restaurant.rating}/5</p>
+                            <p>${restaurant.address}</p>
+                        </div>
+                    `
+                });
+
+                // Événement au clic sur le marqueur
+                marker.addListener("click", () => {
+                    infowindow.open(map, marker);
+                });
+            });
+        }
+
+        // Initialisation de la carte
+        window.onload = initMap;
+    </script>
+</body>
+</html>
